@@ -1,0 +1,6 @@
+streamlit==1.17.0
+numpy==1.19.5
+pandas
+seaborn
+matplotlib
+statsmodels
