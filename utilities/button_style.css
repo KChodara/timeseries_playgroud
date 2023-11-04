@@ -1,0 +1,8 @@
+.stButton>button {
+    background-color: #F63366;
+    color: #FFFFFF;
+    border-color: #000000;
+    border-width: thin;
+    height: 4em;
+    width: 18em;
+}
