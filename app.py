@@ -4,7 +4,7 @@ import seaborn as sns
 import streamlit as st
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
-from utilities.app_helper_functions import generate_wave, local_css, populate_sidebar_get_setup
+from utilities.app_helper_functions import generate_wave, plot_dataset, populate_sidebar_get_setup
 from utilities.predict import calculate_statistics, predict_timeseries
 
 # Setting up global parameters - the challenge is to predict the next 8 points
@@ -24,10 +24,10 @@ if choice == 0:
     st.subheader("Hi!")
     st.image('Krzysztof.jpg', width=600, caption="It's me and Concorde")
     st.write("""\n
-            Krzysztof Chodara here \n
+            Krzysztof Chodara here! \n
             I recently noticed that despite having a lot of experience in data science and time-series forecasting,
              I haven't come across a practical use of ARIMA model. Typically I have used CNN or regression
-             for particular points in time.So I created this webpage to play around with ARIMA model.
+             for particular points in time. So I created this webpage to play around with ARIMA model.
             """)
 
     st.subheader("The purpose")
@@ -94,22 +94,9 @@ else:
 
     # Plot main graph
     st.write("The plot presents generated data. Use the sliders on the left to modify the curve. "
-             "You can turn off plotting the dataset to improve diffuculty")
-    fig, ax = plt.subplots()
-    sns.lineplot(x=X, y=Y, color=MY_PALLETE[0])
-    sns.scatterplot(x=X, y=Y, color=MY_PALLETE[0], size=0.1, marker='x')
-    if data_setup['show_test']:
-        # Show test dataset on the main plot only if required
-        sns.lineplot(x=X_test, y=Y_test, color=MY_PALLETE[1], linestyle=':')
-        sns.scatterplot(x=X_test, y=Y_test, color='k', size=1.1, marker='x')
-        plt.ylim(min(-1, min(Y), min(Y_test)) * 1.1, max(1, max(Y), max(Y_test)) * 1.1)
-        plt.legend(['Train', 'Test'], loc=3)
-    else:
-        plt.ylim(min(-1, min(Y)) * 1.1, max(1, max(Y)) * 1.1)
-        plt.legend(['Train'], loc=3)
-    plt.xlabel('Time [Your favourite time unit]')
-    plt.ylabel('Sample value [Your favourite financial measure]')
-    st.pyplot(fig)
+             "You can turn off plotting the dataset to improve difficulty.")
+    test_tuple = (X_test, Y_test) if data_setup['show_test'] else None
+    plot_dataset((X, Y), test_tuple, pallete=MY_PALLETE)
 
     # Show some insights into the generated dataset
     if data_setup['validate']:
@@ -129,22 +116,13 @@ else:
         model_setup['values'] = list(Y)
         predictions = predict_timeseries(Y, steps=TEST_LEN, **model_setup)
 
-        # To make graph continuous, include the last training point in the graph
+        # To make graph continuous, include the last training point in the graph.
+        # X values for the test and pred dataset is the same
         X_pred = X_test
         Y_pred = np.append(Y[-1], predictions)
 
         # Plot results
-        fig, ax = plt.subplots()
-        sns.lineplot(x=X, y=Y, color=MY_PALLETE[0])
-        sns.lineplot(x=X_test, y=Y_test, color=MY_PALLETE[1], linestyle=':')
-        sns.lineplot(x=X_pred, y=Y_pred, color=MY_PALLETE[2])
-        sns.scatterplot(x=X_pred[1:], y=Y_pred[1:], color=MY_PALLETE[2], size=0.2)
-        plt.legend(['Train', 'Test', 'Predict'], loc=3)
-        plt.xlabel('Sample number')
-        plt.ylabel('Sample value')
-        st.pyplot(fig)
-
-        # Show the stats and suggest next steps
+        plot_dataset((X, Y), (X_test, Y_test), (X_pred, Y_pred), pallete=MY_PALLETE)
         stats = calculate_statistics(Y_test[1:], Y_pred[1:])
         st.write("The prediction is too good? Try to make the dataset more challenging to predict.")
         st.write("Since the generator can produce data with various characteristics decide which loss function"
