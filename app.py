@@ -21,38 +21,39 @@ choice = pages[st.sidebar.radio("Select chapter:", tuple(pages.keys()), 1)]
 
 if choice == 0:
     st.title("ARIMA playground")
-    st.subheader("Hi!")
-    st.image('Krzysztof.jpg', width=600, caption="It's me and Concorde")
+    st.image('Krzysztof.jpg', width=400, caption="It's me and Concorde")
     st.write("""\n
-            Krzysztof Chodara here! \n
-            I recently noticed that despite having a lot of experience in data science and time-series forecasting,
-             I haven't come across a practical use of ARIMA model. Typically I have used CNN or regression
-             for particular points in time. So I created this webpage to play around with ARIMA model.
+            Hi! Krzysztof Chodara here! \n
+            I am a Senior Data Scientist with an extensive background in data science and time series forecasting.
+             However, until now, I have yet to encounter a practical use of the ARIMA model. I have typically 
+             used CNNs or regressions for specific points in time. Therefore, 
+             I created this website to play with the ARIMA model.
             """)
 
     st.subheader("The purpose")
     st.write("""\n
         The goal of this app is to allow an user to experiment easily with ARIMA models. Thanks to that, the app helps
          to understand: \n
-        - When is it efficient to use the model
-        - Which scenarios are more straightforward for the model to predict and which are more difficult
-        - How the noise interrupts the predictions
-        - How important is the right balance between autoregression, differencing and moving average parts of the model
-        - How we can set up the parts from the previous point
-        - Understanding that the increasing hyperparameters' value in the model configuration doesn't always lead to
-          better performance
+        - when it is efficient to use the model,
+        - which scenarios are more straightforward for the model to predict, and which are more complex,
+        - how the noise interrupts the predictions,
+        - how important is the right balance between autoregression, differencing, and moving average parts of
+          the model,
+        - how we can set up the pieces from the previous point,
+        - understanding that the increasing hyperparameters' value in the model configuration only sometimes leads to
+          better performance.
         """)
 
     st.subheader("Typical use case")
     st.write("""
-        1. Create a synthetic dataset using wide range of choices to define the charactericts
-        2. See and validate the dataset to understand the data 
-        3. Set up model hyperparamets
-        4. Train the model and make predictions
-        5. Compare the predicted values with the actual values
+        - Create a synthetic dataset using various choices to define the characteristics.
+        - See and validate the dataset to understand the data.
+        - Set up model hyperparameters.
+        - Train the model and make predictions.
+        - Compare the predicted values with the actual values.
         \n""")
 
-    st.subheader(""" \n Use the radio buttons on the left to navigate between chapters \n \n \n \n""")
+    st.subheader(""" \n Use the radio buttons on the left to navigate between chapters. \n \n \n \n""")
 
 elif choice == 1:
     # To be finished up later
@@ -71,16 +72,16 @@ else:
     data_setup, model_setup = populate_sidebar_get_setup()
     points_granularity = data_setup['points_granularity']
     st.text("""Note: Work in progress - new updates soon""")
-    st.subheader("Instructions:")
+    st.subheader("Instructions")
     st.write("""
-            1. Modify the dataset by using sliders in the dataset group in the sidebar.
-            2. Use the "Validate dataset" button to check if the dataset is stationary. Scroll sidebar down to 
-               see the buttons.
-            3. Based on the findings set up the model parameters and press the "Train and predict" button. 
-               You will see the predictions below the original graph.
-            4. If the model predictions are off - modify the model. If the predictions are accurate - 
-               make the dataset more challening. 
-            5. Good luck and have fun!
+            1. Modify the dataset using sliders in the dataset group in the sidebar.
+            2. Use the "Validate dataset" button to check if the dataset is stationary. Scroll the sidebar down
+               to see the buttons.
+            3. Based on the findings, set the model parameters and press the "Train and predict" switch. You will see
+               the predictions below the original graph.
+            4. If the model predictions are off, modify the model. If the predictions are accurate, make the dataset
+               more challenging.
+            5. Good luck, and have fun!
             \n""")
 
     # Fetch user input and generate dataset
@@ -100,10 +101,10 @@ else:
 
     # Show some insights into the generated dataset
     if data_setup['validate']:
-        st.subheader("Dataset validation:")
+        st.subheader("Dataset validation")
         st.text(f'Train data average value: {np.mean(X)}')
-        st.write("To set-up the model hyperparameters it's important to understand what happens in the data. "
-                 "ACF and PACF graphs are helpful to see how dynamic is the dataset")
+        st.write("It's essential to understand what happens in the data to configure the model hyperparameters. "
+                 "ACF and PACF graphs are helpful to see how dynamic the dataset is.")
         fig, ax = plt.subplots()
         acf_original = plot_acf(X, lags=int(len(X) / 2) - 1)
         st.pyplot(acf_original)
@@ -112,7 +113,7 @@ else:
 
     # Predict the future using selected options, plot the results, show predictions error
     if model_setup['train']:
-        st.subheader("Predictions:")
+        st.subheader("Predictions")
         model_setup['values'] = list(Y)
         predictions = predict_timeseries(Y, steps=TEST_LEN, **model_setup)
 
@@ -124,7 +125,7 @@ else:
         # Plot results
         plot_dataset((X, Y), (X_test, Y_test), (X_pred, Y_pred), pallete=MY_PALLETE)
         stats = calculate_statistics(Y_test[1:], Y_pred[1:])
-        st.write("The prediction is too good? Try to make the dataset more challenging to predict.")
-        st.write("Since the generator can produce data with various characteristics decide which loss function"
-                 " matches your needs at best.")
+        st.write("Is the prediction too good? Try to make the dataset more challenging to predict!")
+        st.write("Decide which loss function best meets your needs, as the generator can produce data "
+                 "with different characteristics.")
         st.write(stats)

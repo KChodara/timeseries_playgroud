@@ -90,6 +90,6 @@ def plot_dataset(data_train, data_test=None, data_pred=None, pallete=('black', '
     labels = ['Train'] + [label for label, data in (('Test', data_test), ('Predict', data_pred)) if data is not None]
     plt.legend(labels, loc=3)
 
-    plt.xlabel('Time [Your favourite time unit]')
+    plt.xlabel('Time [Minutes]')
     plt.ylabel('Sample value')
     st.pyplot(fig)
