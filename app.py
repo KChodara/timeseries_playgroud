@@ -77,7 +77,7 @@ else:
             1. Modify the dataset using sliders in the dataset group in the sidebar.
             2. Use the "Validate dataset" button to check if the dataset is stationary. Scroll the sidebar down
                to see the buttons.
-            3. Based on the findings, set the model parameters and press the "Train and predict" switch. You will see
+            3. Based on the findings, set the model parameters and press the "Train and predict" button. You will see
                the predictions below the original graph.
             4. If the model predictions are off, modify the model. If the predictions are accurate, make the dataset
                more challenging.
