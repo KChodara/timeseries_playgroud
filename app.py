@@ -1,11 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 import streamlit as st
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
-from utilities.app_helper_functions import generate_wave, plot_dataset, populate_sidebar_get_setup
-from utilities.predict import calculate_statistics, predict_timeseries
+from utilities.visual_operations import plot_dataset, populate_sidebar_get_setup
+from utilities.data_operations import calculate_statistics, generate_wave, predict_timeseries
 
 # Setting up global parameters - the challenge is to predict the next 8 points
 TEST_LEN = 8
@@ -71,7 +70,6 @@ else:
     # Print instructions
     data_setup, model_setup = populate_sidebar_get_setup()
     points_granularity = data_setup['points_granularity']
-    st.text("""Note: Work in progress - new updates soon""")
     st.subheader("Instructions")
     st.write("""
             1. Modify the dataset using sliders in the dataset group in the sidebar.
@@ -85,7 +83,7 @@ else:
             \n""")
 
     # Fetch user input and generate dataset
-    st.subheader("Generated data:")
+    st.subheader("Generated data")
     X = np.array(range(data_setup['length'] + TEST_LEN)) * points_granularity
     Y = generate_wave(X, data_setup)
 

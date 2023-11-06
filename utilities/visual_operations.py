@@ -42,40 +42,29 @@ def populate_sidebar_get_setup():
     return data, model
 
 
-def generate_wave(x_set, params):
-    # Generate wave based on sin transformations
-    wave = np.sin(x_set / params['period']) * (1 + params['amplitude_growth'] * x_set) * params[
-        'amplitude'] + x_set * params['growth'] + params['noise'] * np.random.randn(len(x_set))
-
-    if params['make_values_positive'] and min(wave) < 1:
-        wave = wave - min(wave) + 1
-
-    if params['make_log']:
-        wave = np.log(wave)
-
-    return wave
-
-
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 
 def plot_dataset(data_train, data_test=None, data_pred=None, pallete=('black', 'blue', 'red')):
+    legend_handles = []
     fig, ax = plt.subplots()
-    sns.lineplot(x=data_train[0], y=data_train[1], color=pallete[0])
+    line_train = sns.lineplot(x=data_train[0], y=data_train[1], color=pallete[0], label='Train')
+    line_train.set_label('Train')
     if data_test:
-        sns.lineplot(x=data_test[0], y=data_test[1], color=pallete[1], linestyle=':')
-
+        line_test = sns.lineplot(x=data_test[0], y=data_test[1], color=pallete[1], linestyle=':', label='Test')
+        legend_handles.append(line_test)
     # To keep graph tidy - show points on the original data only if there is no prediction data.
     # But always show the points on the prediction data
     if data_pred is None:
-        sns.scatterplot(x=data_train[0], y=data_train[1], color=pallete[0], size=0.1, marker='x')
+        sns.scatterplot(x=data_train[0], y=data_train[1], color=pallete[0], size=0.1, marker='x', legend=False)
         if data_test:
-            sns.scatterplot(x=data_test[0], y=data_test[1], color='k', size=1.1, marker='x')
+            sns.scatterplot(x=data_test[0], y=data_test[1], color='k', size=1.1, marker='x', legend=False)
     else:
-        sns.lineplot(x=data_pred[0], y=data_pred[1], color=pallete[2])
-        sns.scatterplot(x=data_pred[0][1:], y=data_pred[1][1:], color=pallete[2], size=0.2)
+        line_pred = sns.lineplot(x=data_pred[0], y=data_pred[1], color=pallete[2], label='Predictions')
+        legend_handles.append(line_pred)
+        sns.scatterplot(x=data_pred[0][1:], y=data_pred[1][1:], color=pallete[2], size=0.2, legend=False)
 
     # To help user understand the amplitude scale during data generation - make the y-axis limits a little bit leaky.
     # But when showing the predictions use the default scale
@@ -86,10 +75,7 @@ def plot_dataset(data_train, data_test=None, data_pred=None, pallete=('black', '
             y_lim_data = data_train[1]
         plt.ylim(min(0, min(y_lim_data) * 1.1, max(1, max(y_lim_data) * 1.1)))
 
-    # Set legend
-    labels = ['Train'] + [label for label, data in (('Test', data_test), ('Predict', data_pred)) if data is not None]
-    plt.legend(labels, loc=3)
-
-    plt.xlabel('Time [Minutes]')
+    plt.legend(loc=3)
+    plt.xlabel('Time [minutes]')
     plt.ylabel('Sample value')
     st.pyplot(fig)

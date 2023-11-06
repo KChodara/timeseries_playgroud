@@ -4,6 +4,20 @@ from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tools.eval_measures import meanabs, mse, rmse, rmspe
 
 
+def generate_wave(x_set, params):
+    # Generate wave based on sin transformations
+    wave = np.sin(x_set / params['period']) * (1 + params['amplitude_growth'] * x_set) * params[
+        'amplitude'] + x_set * params['growth'] + params['noise'] * np.random.randn(len(x_set))
+
+    if params['make_values_positive'] and min(wave) < 1:
+        wave = wave - min(wave) + 1
+
+    if params['make_log']:
+        wave = np.log(wave)
+
+    return wave
+
+
 def predict_timeseries(training_data, ar=0, i=0, ma=1, steps=8, **kwargs):
     arima_model = ARIMA(training_data, order=(ar, i, ma))
     model = arima_model.fit()
