@@ -75,7 +75,7 @@ def plot_dataset(data_train, data_test=None, data_pred=None, pallete=('black', '
             y_lim_data = data_train[1]
         plt.ylim(min(0, min(y_lim_data) * 1.1, max(1, max(y_lim_data) * 1.1)))
 
-    plt.legend(loc=3)
+    plt.legend()
     plt.xlabel('Time [minutes]')
     plt.ylabel('Sample value')
     st.pyplot(fig)
