@@ -3,7 +3,7 @@ import streamlit as st
 def print_static_text(choice):
     if choice == 0:
         st.title("ARIMA playground")
-        st.image('../Krzysztof.jpg', width=350, caption="It's me and Concorde")
+        st.image('./images/Krzysztof.jpg', width=350, caption="It's me and Concorde")
         st.write("""\n
                     Hi! Krzysztof Chodara here! \n
                     I am a Senior Data Scientist with an extensive background in data science and time series 
@@ -51,7 +51,7 @@ def print_static_text(choice):
                  want to use a complex model as the dataset is small. Also company X wants to understand how the
                  prediction is done.  
                 """)
-        st.image('../timeseries.png', width=600, caption="Solid line - known data, dotted - data you want to predict "
+        st.image('./images/timeseries.png', width=600, caption="Solid line - known data, dotted - data you want to predict "
                                                       "(but you don't know it yet)")
         st.subheader("How is it built?")
         st.write("""\n

@@ -13,10 +13,10 @@ MY_PALLETE = ['#1e4a76', '#7dc0f7', '#ff7c0a']
 
 # Set up menu and print static text
 st.set_page_config(page_title='ARIMA Playground')
-pages = {'Page intro': 0,
-         'What is ARIMA model?': 1,
+pages = {'Intro': 0,
+         'What is the ARIMA model?': 1,
          'The playground': 2}
-choice = pages[st.sidebar.radio("Select chapter:", tuple(pages.keys()), 1)]
+choice = pages[st.sidebar.radio("Select chapter:", tuple(pages.keys()), 2)]
 print_static_text(choice)
 
 # Show the playground if it's selected
