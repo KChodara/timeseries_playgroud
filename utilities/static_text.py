@@ -35,6 +35,9 @@ def print_static_text(choice):
                 - Compare the predicted values with the actual values.
                 \n""")
 
+        st.subheader("This page's GitHub repo...")
+        st.write("[...can be found here](https://github.com/KChodara/timeseries_playgroud)")
+
         st.subheader(""" \n Use the radio buttons on the left to navigate between chapters. \n \n \n \n""")
 
     elif choice == 1:
